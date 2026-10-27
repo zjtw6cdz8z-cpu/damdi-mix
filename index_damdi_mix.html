@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Damdi.mix — Вкус в каждом кусочке</title>
+<style>
+:root{--green:#b8ff00;--yellow:#fff500;--bg:#080b08;--panel:#121812;--muted:#a8b0a2}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#fff;overflow-x:hidden}
+button,input{font:inherit}button{cursor:pointer}
+header{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 6%;border-bottom:1px solid #293329;background:#090d09ed;position:sticky;top:0;z-index:20;backdrop-filter:blur(14px)}
+.logo{font-size:29px;font-weight:900;letter-spacing:-1px}.logo span{color:var(--green);text-shadow:0 0 20px #b8ff0080}
+nav{display:flex;gap:22px;align-items:center}nav button{border:0;background:none;color:#e4e8e0;transition:.25s}nav button:hover{color:var(--green);text-shadow:0 0 12px var(--green)}
+.cart-top{border:1px solid #425034;background:#141b10;color:var(--green);padding:10px 14px;border-radius:12px}
+.hero{min-height:610px;display:flex;align-items:center;padding:75px 8%;position:relative;overflow:hidden;background:radial-gradient(ellipse at 78% 50%,#48651e65,transparent 40%),radial-gradient(ellipse at 18% 85%,#a7ff0018,transparent 38%),linear-gradient(115deg,#080b08,#11180d 60%,#050705)}
+.hero:after{content:"";position:absolute;width:380px;height:380px;right:8%;top:15%;border-radius:50%;background:#b8ff0019;filter:blur(70px);animation:glow 4s infinite alternate}
+.hero-content{position:relative;z-index:2;max-width:600px;animation:enter .9s ease both}
+.eyebrow{color:var(--green);font-size:12px;letter-spacing:3px;text-transform:uppercase;margin-bottom:22px}
+h1{font-size:clamp(43px,6vw,76px);line-height:1.04;margin-bottom:22px}h1 span,.section-head span{color:var(--green);text-shadow:0 0 24px #b8ff0030}
+.hero p{color:#c3c9bf;line-height:1.8;max-width:440px;margin-bottom:30px}
+.primary{border:0;border-radius:40px;padding:16px 27px;background:linear-gradient(100deg,var(--green),var(--yellow));color:#111600;font-weight:900;box-shadow:0 0 22px #b8ff0045;transition:.25s}
+.primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 0 36px #d9ff0080}.primary:active{transform:scale(.96)}
+.hero-food {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 58%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    animation: float 5s ease-in-out infinite;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.35) 12%,
+        black 35%,
+        black 100%
+    );
+    mask-image: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(0, 0, 0, 0.35) 12%,
+        black 35%,
+        black 100%
+    );
+}
+
+.hero-food img {
+    position: absolute;
+    right: -5%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 110%;
+    height: 90%;
+       object-fit: cover;
+    object-position: center;
+    border-radius: 0;
+    filter: brightness(0.78) contrast(1.08) saturate(0.9);
+    -webkit-mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 12%,
+        black 82%,
+        transparent 100%
+    );
+    mask-image: linear-gradient(
+        to bottom,
+        transparent 0%,
+        black 12%,
+        black 82%,
+        transparent 100%
+    );
+}
+
+.food-shadow {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        90deg,
+        #080a06 0%,
+        transparent 45%,
+        transparent 75%,
+        #080a06 100%
+    );
+}
+.hero-food small{display:block;font-size:13px;color:var(--green);letter-spacing:4px}
+#menu{padding:68px 5%;scroll-margin-top:78px}
+.section-head{text-align:center;margin-bottom:30px}.section-head h2{font-size:clamp(30px,4vw,44px);margin-bottom:10px}.section-head p{color:var(--muted)}
+.search-box{max-width:620px;margin:0 auto 24px;display:flex;align-items:center;gap:12px;padding:7px 15px;background:#101510;border:1px solid #384631;border-radius:17px;transition:.25s}
+.search-box:focus-within{border-color:var(--green);box-shadow:0 0 22px #b8ff0040}.search-box input{flex:1;min-width:0;padding:12px 0;color:#fff;background:transparent;border:0;outline:0}.search-box input::placeholder{color:#879080}.search-box button{border:0;background:transparent;color:var(--green);font-size:19px}
+.categories{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin-bottom:30px}
+.category{padding:10px 17px;border:1px solid #34402e;border-radius:30px;background:#101510;color:#e1e7dc;transition:.25s}
+.category:hover,.category.active{background:var(--green);color:#111600;border-color:var(--green);box-shadow:0 0 20px #b8ff0045}
+.shop-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:22px;align-items:start}
+.products{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
+.product{overflow:hidden;border:1px solid #2b3529;border-radius:18px;background:linear-gradient(145deg,#171e16,#0d110d);transition:transform .3s,border-color .3s,box-shadow .3s;animation:enter .45s ease both}
+.product:hover{transform:translateY(-6px);border-color:var(--green);box-shadow:0 12px 35px #aaff0018}
+.photo{height:145px;display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse,#53652b45,transparent 70%),#0b0f0b;border-bottom:1px solid #252d22}
+.photo img{width:100%;height:100%;object-fit:cover;transition:transform .5s}.product:hover .photo img{transform:scale(1.08)}
+.product-info{padding:15px}.product h3{font-size:16px;margin-bottom:8px}.desc{font-size:12px;line-height:1.5;color:#9da69a;min-height:36px}
+.product-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:13px}.price{font-size:16px;font-weight:900;color:var(--green)}
+.add{height:40px;min-width:40px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--green),var(--yellow));color:#111600;font-size:25px;box-shadow:0 0 13px #b8ff0030;transition:.25s}.add:hover{transform:scale(1.1);box-shadow:0 0 25px #b8ff0080}.add:active{transform:scale(.86)}
+.cart{position:sticky;top:94px;padding:21px;border:1px solid #34402e;border-radius:20px;background:linear-gradient(145deg,#171e16,#0b0e0b)}
+.cart h2{font-size:23px;margin-bottom:7px}.cart-note{font-size:12px;color:#8f9a89;margin-bottom:18px}.cart-items{display:grid;gap:14px}
+.empty{text-align:center;padding:22px 0;color:#8f9a89;line-height:1.7}.cart-item{padding-bottom:13px;border-bottom:1px solid #30392c;animation:enter .25s ease both}
+.item-top{display:flex;justify-content:space-between;gap:8px;margin-bottom:10px}.item-name{font-size:13px;font-weight:bold}.remove{border:0;background:transparent;color:#ff806b;font-size:19px}
+.item-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px}.quantity{display:flex;align-items:center;gap:10px}.quantity button{width:28px;height:28px;border:1px solid #46513d;border-radius:8px;color:var(--green);background:#141b10;transition:.2s}.quantity button:hover{background:var(--green);color:#111600}.item-price{color:var(--green);font-size:13px;font-weight:bold}
+.total{display:flex;justify-content:space-between;gap:8px;margin:22px 0;font-size:17px;font-weight:bold}.total strong{color:var(--green)}.checkout{width:100%}
+.notice{min-height:20px;margin-top:12px;color:var(--green);font-size:13px;line-height:1.5}
+.delivery{margin-top:18px;padding:15px;border:1px solid #2d3828;border-radius:15px;color:#c6cec0;font-size:13px;line-height:1.6}.delivery b{color:var(--green)}
+footer{padding:28px 6%;text-align:center;border-top:1px solid #263025;color:#818a7b;font-size:13px}
+#toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,25px);opacity:0;pointer-events:none;background:#c5ff26;color:#101500;font-weight:bold;padding:13px 20px;border-radius:30px;box-shadow:0 0 28px #b8ff0060;transition:.3s;z-index:50}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+@keyframes enter{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{margin-top:0}50%{margin-top:-15px}}
+@keyframes glow{from{opacity:.5;transform:scale(.9)}to{opacity:1;transform:scale(1.1)}}
+@media(max-width:1000px){.shop-layout{grid-template-columns:1fr}.cart{position:static}.products{grid-template-columns:repeat(3,minmax(0,1fr))}.hero-food{right:1%;opacity:.7}}
+@media(max-width:700px){header{padding:0 4%;height:68px}.logo{font-size:23px}nav{gap:10px}nav button{font-size:12px}.hero{min-height:570px;padding:65px 7%;align-items:flex-start}.hero-content{max-width:100%}.hero-food{top:auto;bottom:20px;right:4%;width:90%;font-size:145px;opacity:.65}.hero p{max-width:360px}.products{grid-template-columns:repeat(2,minmax(0,1fr))}#menu{padding:50px 4%}.photo{height:125px}.product-info{padding:12px}.product h3{font-size:14px}}
+@media(max-width:430px){nav button:nth-child(2),nav button:nth-child(3){display:none}.products{gap:10px}.photo{height:105px}.product h3{font-size:13px}.price{font-size:14px}.add{min-width:35px;height:35px}.hero-food{font-size:120px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Damdi.<span>mix</span></div>
+  <nav>
+    <button onclick="goHome()">Главная</button>
+    <button onclick="openMenu()">Меню</button>
+    <button onclick="openMenu()">О нас</button>
+  </nav>
+  <button class="cart-top" onclick="goCart()">🛒 <span id="cartCount">0</span></button>
+</header>
+
+<section class="hero" id="home">
+  <div class="hero-content">
+    <div class="eyebrow">Свежие ингредиенты · Вкус каждый день</div>
+    <h1>Добро пожаловать<br>в <span>Damdi.mix</span></h1>
+    <p>Твой любимый фастфуд в одном месте. Сочные бургеры, горячая пицца, хрустящая курочка и многое другое. Выбирай и наслаждайся!</p>
+    <button class="primary" onclick="openMenu()">🍴 Заказать блюдо →</button>
+  </div>
+ <div class="hero-food">
+    <img
+        src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1400&q=90"
+        alt="Свежие суши Damdi.mix"
+    >
+    <div class="food-shadow"></div>
+</div>
+</section>
+
+<main id="menu">
+  <div class="section-head">
+    <div class="eyebrow">Наше меню</div>
+    <h2>Выбирай свой <span>вкус</span></h2>
+    <p>Добавляй любимые блюда в корзину</p>
+  </div>
+  <label class="search-box">
+    <span>🔎</span>
+    <input id="foodSearch" type="search" placeholder="Найти блюдо: бургер, пицца, шаурма..." autocomplete="off">
+    <button type="button" onclick="clearSearch()" aria-label="Очистить поиск">✕</button>
+  </label>
+  <div class="categories" id="categories"></div>
+  <div class="shop-layout">
+    <section class="products" id="products" aria-live="polite"></section>
+    <aside class="cart" id="cart">
+      <h2>🛒 Корзина</h2>
+      <div class="cart-note">Твой заказ Damdi.mix</div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="total"><span>Итого:</span><strong id="total">0 ₸</strong></div>
+      <button class="primary checkout" onclick="checkout()">Оформить заказ →</button>
+      <div class="notice" id="notice" role="status"></div>
+      <div class="delivery">🚚 <b>Быстрая доставка</b><br>Готовим свежим и привозим горячим!</div>
+    </aside>
+  </div>
+</main>
+
+<footer>© 2026 Damdi.mix · Вкус, который объединяет 🍔</footer>
+<div id="toast" role="status"></div>
+
+<script>
+const dishes = [
+ {id:1,name:"Классический бургер",cat:"Бургеры",price:1890,desc:"Говядина, сыр, салат, томаты, соус",emoji:"🍔",img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=85"},
+ {id:2,name:"Чизбургер",cat:"Бургеры",price:2290,desc:"Сочная котлета и двойной сыр",emoji:"🍔",img:"https://images.unsplash.com/photo-1553979459-d2229ba7433a?auto=format&fit=crop&w=700&q=85"},
+ {id:3,name:"Бургер с беконом",cat:"Бургеры",price:2790,desc:"Бекон, говядина, сыр и BBQ",emoji:"🍔",img:"https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=700&q=85"},
+ {id:4,name:"BBQ бургер",cat:"Бургеры",price:2590,desc:"Говядина, лук и дымный соус BBQ",emoji:"🍔",img:"https://images.unsplash.com/photo-1571091718767-18b5b1457add?auto=format&fit=crop&w=700&q=85"},
+ {id:5,name:"Острый бургер",cat:"Бургеры",price:2490,desc:"Острый соус, халапеньо и сыр",emoji:"🌶️",img:"https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=700&q=85"},
+ {id:6,name:"Вегетарианский бургер",cat:"Бургеры",price:1890,desc:"Овощная котлета, салат и томаты",emoji:"🥬",img:"https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=700&q=85"},
+ {id:7,name:"Пепперони",cat:"Пицца",price:2990,desc:"Пепперони, сыр моцарелла и томатный соус",emoji:"🍕",img:"https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=700&q=85"},
+ {id:8,name:"Пицца 4 сыра",cat:"Пицца",price:3490,desc:"Моцарелла, чеддер и сливочный соус",emoji:"🍕",img:"https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=700&q=85"},
+ {id:9,name:"Куриная BBQ",cat:"Пицца",price:3290,desc:"Курица, BBQ, красный лук и сыр",emoji:"🍕",img:"https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=700&q=85"},
+ {id:10,name:"Шаурма классическая",cat:"Шаурма",price:1490,desc:"Курица, овощи и фирменный соус",emoji:"🌯",img:"https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=700&q=85"},
+ {id:11,name:"Шаурма сырная",cat:"Шаурма",price:1790,desc:"Курица, сыр, овощи и чесночный соус",emoji:"🌯",img:"https://images.unsplash.com/photo-1561651823-34feb02250e4?auto=format&fit=crop&w=700&q=85"},
+ {id:12,name:"Ролл с курицей",cat:"Шаурма",price:1590,desc:"Хрустящая курица, салат и соус",emoji:"🌯",img:"https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=700&q=85"},
+ {id:13,name:"Картофель фри",cat:"Закуски",price:790,desc:"Золотистый и хрустящий картофель",emoji:"🍟",img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=700&q=85"},
+ {id:14,name:"Наггетсы",cat:"Закуски",price:1190,desc:"Куриные наггетсы с соусом",emoji:"🍗",img:"https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=700&q=85"},
+ {id:15,name:"Луковые кольца",cat:"Закуски",price:990,desc:"Хрустящие кольца в золотистой панировке",emoji:"🧅",img:"https://images.unsplash.com/photo-1639024471283-03518883512d?auto=format&fit=crop&w=700&q=85"},
+ {id:16,name:"Сырные палочки",cat:"Закуски",price:1290,desc:"Тянущийся сыр в хрустящей корочке",emoji:"🧀",img:"https://images.unsplash.com/photo-1531749668029-2db88e4276c7?auto=format&fit=crop&w=700&q=85"},
+ {id:17,name:"Куриные крылышки",cat:"Курица",price:1790,desc:"Сочные крылышки в фирменной глазури",emoji:"🍗",img:"https://images.unsplash.com/photo-1527477396000-e27163b481c2?auto=format&fit=crop&w=700&q=85"},
+ {id:18,name:"Куриные стрипсы",cat:"Курица",price:1490,desc:"Нежное куриное филе в панировке",emoji:"🍗",img:"https://images.unsplash.com/photo-1606755962773-d324e0a13086?auto=format&fit=crop&w=700&q=85"},
+ {id:19,name:"Кола",cat:"Напитки",price:590,desc:"Освежающий газированный напиток",emoji:"🥤",img:"https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=700&q=85"},
+ {id:20,name:"Лимонад",cat:"Напитки",price:790,desc:"Холодный лимонад с цитрусом",emoji:"🍋",img:"https://images.unsplash.com/photo-1513558161293-cadb0f2dad05?auto=format&fit=crop&w=700&q=85"},
+ {id:21,name:"Молочный коктейль",cat:"Напитки",price:1190,desc:"Нежный сливочный коктейль",emoji:"🥤",img:"https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=700&q=85"},
+ {id:22,name:"Чизкейк",cat:"Десерты",price:1390,desc:"Нежный сливочный десерт",emoji:"🍰",img:"https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=700&q=85"},
+ {id:23,name:"Мороженое",cat:"Десерты",price:690,desc:"Холодное лакомство с топпингом",emoji:"🍨",img:"https://images.unsplash.com/photo-1560008581-09826d1de69e?auto=format&fit=crop&w=700&q=85"}
+];
+const categories=["Все","Бургеры","Пицца","Шаурма","Закуски","Курица","Напитки","Десерты"];
+let activeCategory="Все";
+let cart={};
+const money=n=>n.toLocaleString("ru-RU")+" ₸";
+const productsEl=document.getElementById("products");
+const searchEl=document.getElementById("foodSearch");
+
+function renderCategories(){
+ document.getElementById("categories").innerHTML=categories.map(c=>`<button class="category ${c===activeCategory?"active":""}" onclick="setCategory('${c}')">${c}</button>`).join("");
+}
+function renderProducts(){
+ const q=searchEl.value.trim().toLocaleLowerCase("ru");
+ const filtered=dishes.filter(d=>(activeCategory==="Все"||d.cat===activeCategory)&&(`${d.name} ${d.cat} ${d.desc}`.toLocaleLowerCase("ru").includes(q)));
+ if(!filtered.length){productsEl.innerHTML='<div class="empty" style="grid-column:1/-1">😕 Ничего не найдено.<br>Попробуй другое название блюда.</div>';return;}
+ productsEl.innerHTML=filtered.map((d,i)=>`<article class="product" style="animation-delay:${Math.min(i,8)*.035}s">
+ <div class="photo"><img src="${d.img}" alt="${d.name}" loading="lazy" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=&quot;font-size:65px&quot;>${d.emoji}</span>'"></div>
+ <div class="product-info"><h3>${d.name}</h3><p class="desc">${d.desc}</p><div class="product-bottom"><span class="price">${money(d.price)}</span><button class="add" onclick="addToCart(${d.id})" aria-label="Добавить ${d.name}">+</button></div></div></article>`).join("");
+}
+function setCategory(cat){activeCategory=cat;renderCategories();renderProducts();}
+function searchFood(){renderProducts();}
+function clearSearch(){searchEl.value="";renderProducts();searchEl.focus();}
+function addToCart(id){cart[id]=(cart[id]||0)+1;renderCart();toast("Добавлено в корзину ✓");}
+function changeQty(id,delta){cart[id]=(cart[id]||0)+delta;if(cart[id]<=0)delete cart[id];renderCart();}
+function removeItem(id){delete cart[id];renderCart();}
+function renderCart(){
+ const items=Object.entries(cart);
+ const count=items.reduce((s,[,q])=>s+q,0);
+ const total=items.reduce((s,[id,q])=>s+dishes.find(d=>d.id===Number(id)).price*q,0);
+ document.getElementById("cartCount").textContent=count;
+ document.getElementById("total").textContent=money(total);
+ const el=document.getElementById("cartItems");
+ if(!items.length){el.innerHTML='<div class="empty">🛒<br>Корзина пока пуста.<br>Выбери что-нибудь вкусное!</div>';return;}
+ el.innerHTML=items.map(([id,q])=>{const d=dishes.find(x=>x.id===Number(id));return `<div class="cart-item"><div class="item-top"><span class="item-name">${d.emoji} ${d.name}</span><button class="remove" onclick="removeItem(${id})" aria-label="Удалить">×</button></div><div class="item-bottom"><div class="quantity"><button onclick="changeQty(${id},-1)" aria-label="Уменьшить">−</button><span>${q}</span><button onclick="changeQty(${id},1)" aria-label="Увеличить">+</button></div><span class="item-price">${money(d.price*q)}</span></div></div>`}).join("");
+}
+function openMenu(){document.getElementById("menu").scrollIntoView({behavior:"smooth"});}
+function goCart(){document.getElementById("cart").scrollIntoView({behavior:"smooth",block:"center"});}
+function goHome(){document.getElementById("home").scrollIntoView({behavior:"smooth"});}
+function checkout(){
+ const items=Object.entries(cart);
+ const notice=document.getElementById("notice");
+ if(!items.length){notice.textContent="Сначала добавь блюдо в корзину.";toast("Корзина пуста");return;}
+ const summary=items.map(([id,q])=>{const d=dishes.find(x=>x.id===Number(id));return `${d.name} × ${q}`}).join(", ");
+ const total=items.reduce((s,[id,q])=>s+dishes.find(d=>d.id===Number(id)).price*q,0);
+ notice.textContent=`Демо-заказ: ${summary}. Итого ${money(total)}. Для реального заказа подключи телефон или сервис доставки.`;
+ toast("Заказ подготовлен ✓");
+}
+let toastTimer;
+function toast(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove("show"),2200);}
+searchEl.addEventListener("input",renderProducts);
+renderCategories();renderProducts();renderCart();
+</script>
+</body>
+</html>
